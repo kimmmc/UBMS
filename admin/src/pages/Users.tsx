@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { apiService } from '../services/api';
+import CustomSelect from '../components/CustomSelect';
 import { 
   Users as UsersIcon, 
   Search, 
@@ -367,25 +368,25 @@ export default function Users() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <select
-            className="admin-select"
+          <CustomSelect
             value={roleFilter}
-            onChange={(e) => setRoleFilter(e.target.value)}
-          >
-            <option value="">All Roles</option>
-            <option value="user">Users</option>
-            <option value="driver">Drivers</option>
-            <option value="admin">Admins</option>
-          </select>
-          <select
-            className="admin-select"
+            onChange={setRoleFilter}
+            options={[
+              { value: '', label: 'All Roles' },
+              { value: 'user', label: 'Users' },
+              { value: 'driver', label: 'Drivers' },
+              { value: 'admin', label: 'Admins' }
+            ]}
+          />
+          <CustomSelect
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+            onChange={setStatusFilter}
+            options={[
+              { value: '', label: 'All Status' },
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+          />
           <button
             onClick={fetchUsers}
             className="admin-btn admin-btn-secondary"
@@ -631,10 +632,24 @@ export default function Users() {
       {showCreateModal && (
         <div className="modal-overlay">
           <div className="modal-content max-w-md">
-            <h2 className="text-xl font-bold mb-4" style={{ color: theme.text }}>
-              Add New User
-            </h2>
-            <form onSubmit={handleCreateUser} className="admin-space-y-4">
+            <div className="modal-header">
+              <h2 className="modal-title">
+                Add New User
+              </h2>
+              <button 
+                type="button" 
+                className="modal-close-btn"
+                onClick={() => {
+                  setShowCreateModal(false);
+                  setCreateForm({ name: '', email: '', phone: '', password: '', role: 'user' });
+                  setShowPassword(false);
+                }}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleCreateUser} className="admin-space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: theme.text }}>
                   User Type
@@ -717,15 +732,7 @@ export default function Users() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 pt-4">
-                <button
-                  type="submit"
-                  disabled={createLoading}
-                  className="admin-btn admin-btn-primary flex-1"
-                >
-                  {createLoading ? <div className="spinner" /> : null}
-                  {createLoading ? 'Creating...' : `Create ${createForm.role === 'driver' ? 'Driver' : createForm.role === 'admin' ? 'Admin' : 'User'}`}
-                </button>
+              <div className="modal-footer">
                 <button
                   type="button"
                   onClick={() => {
@@ -733,12 +740,21 @@ export default function Users() {
                     setCreateForm({ name: '', email: '', phone: '', password: '', role: 'user' });
                     setShowPassword(false);
                   }}
-                  className="admin-btn admin-btn-secondary flex-1"
+                  className="admin-btn admin-btn-secondary"
                 >
                   Cancel
                 </button>
+                <button
+                  type="submit"
+                  disabled={createLoading}
+                  className="admin-btn admin-btn-primary"
+                >
+                  {createLoading ? <div className="spinner" /> : null}
+                  {createLoading ? 'Creating...' : `Create ${createForm.role === 'driver' ? 'Driver' : createForm.role === 'admin' ? 'Admin' : 'User'}`}
+                </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

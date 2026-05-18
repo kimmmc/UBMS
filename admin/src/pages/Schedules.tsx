@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { apiService } from '../services/api';
+import CustomSelect from '../components/CustomSelect';
 import { 
   Calendar, 
   Search, 
@@ -388,29 +389,25 @@ export default function Schedules() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <select
-            className="admin-select"
+          <CustomSelect
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">All Status</option>
-            <option value="scheduled">Scheduled</option>
-            <option value="in-transit">In Transit</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-          <select
-            className="admin-select"
+            onChange={setStatusFilter}
+            options={[
+              { value: '', label: 'All Status' },
+              { value: 'scheduled', label: 'Scheduled' },
+              { value: 'in-transit', label: 'In Transit' },
+              { value: 'completed', label: 'Completed' },
+              { value: 'cancelled', label: 'Cancelled' }
+            ]}
+          />
+          <CustomSelect
             value={routeFilter}
-            onChange={(e) => setRouteFilter(e.target.value)}
-          >
-            <option value="">All Routes</option>
-            {routes.map((route) => (
-              <option key={route._id} value={route._id}>
-                {route.name}
-              </option>
-            ))}
-          </select>
+            onChange={setRouteFilter}
+            options={[
+              { value: '', label: 'All Routes' },
+              ...routes.map(route => ({ value: route._id, label: route.name }))
+            ]}
+          />
           <input
             type="date"
             className="admin-input"
@@ -640,10 +637,20 @@ export default function Schedules() {
       {showScheduleModal && (
         <div className="modal-overlay">
           <div className="modal-content max-w-2xl">
-            <h2 className="text-xl font-bold mb-4" style={{ color: theme.text }}>
-              Create New Bus Schedule
-            </h2>
-            <form onSubmit={handleCreateSchedule} className="admin-space-y-4">
+            <div className="modal-header">
+              <h2 className="modal-title">
+                Create New Bus Schedule
+              </h2>
+              <button 
+                type="button" 
+                className="modal-close-btn"
+                onClick={() => setShowScheduleModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleCreateSchedule} className="admin-space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: theme.text }}>
                   Bus
@@ -723,20 +730,21 @@ export default function Schedules() {
                   </div>
                 </div>
               )}
-              <div className="flex items-center gap-3 pt-4">
-                <button type="submit" className="admin-btn admin-btn-primary flex-1" disabled={creating}>
-                  {creating ? 'Creating...' : 'Create Schedule'}
-                </button>
+              <div className="modal-footer">
                 <button
                   type="button"
                   onClick={() => setShowScheduleModal(false)}
-                  className="admin-btn admin-btn-secondary flex-1"
+                  className="admin-btn admin-btn-secondary"
                   disabled={creating}
                 >
                   Cancel
                 </button>
+                <button type="submit" className="admin-btn admin-btn-primary" disabled={creating}>
+                  {creating ? 'Creating...' : 'Create Schedule'}
+                </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

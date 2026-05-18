@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { apiService } from '../services/api';
+import CustomSelect from '../components/CustomSelect';
 import { 
   MapPin, 
   Search, 
@@ -306,18 +307,14 @@ export default function PickupPoints() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <select
-            className="admin-select"
+          <CustomSelect
             value={routeFilter}
-            onChange={(e) => setRouteFilter(e.target.value)}
-          >
-            <option value="">All Routes</option>
-            {routes.map((route) => (
-              <option key={route._id} value={route._id}>
-                {route.name}
-              </option>
-            ))}
-          </select>
+            onChange={setRouteFilter}
+            options={[
+              { value: '', label: 'All Routes' },
+              ...routes.map(route => ({ value: route._id, label: route.name }))
+            ]}
+          />
           <button
             onClick={fetchPickupPoints}
             className="admin-btn admin-btn-secondary"
@@ -429,14 +426,17 @@ export default function PickupPoints() {
                         </div>
                       </td>
                       <td>
-                        <div 
-                          className="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold"
-                          style={{ 
-                            backgroundColor: theme.primary + '20',
-                            color: theme.primary 
-                          }}
-                        >
-                          {pickup.order}
+                        <div className="flex justify-start">
+                          <div 
+                            className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold"
+                            style={{ 
+                              backgroundColor: theme.primary + '20',
+                              color: theme.primary,
+                              lineHeight: 1
+                            }}
+                          >
+                            {pickup.order}
+                          </div>
                         </div>
                       </td>
                       <td>
@@ -489,10 +489,20 @@ export default function PickupPoints() {
       {showPickupModal && (
         <div className="modal-overlay">
           <div className="modal-content max-w-2xl">
-            <h2 className="text-xl font-bold mb-4" style={{ color: theme.text }}>
-              {selectedPickup ? 'Edit Pickup Point' : 'Add New Pickup Point'}
-            </h2>
-            <form onSubmit={handleCreatePickupPoint} className="admin-space-y-4">
+            <div className="modal-header">
+              <h2 className="modal-title">
+                {selectedPickup ? 'Edit Pickup Point' : 'Add New Pickup Point'}
+              </h2>
+              <button 
+                type="button" 
+                className="modal-close-btn"
+                onClick={() => setShowPickupModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleCreatePickupPoint} className="admin-space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: theme.text }}>
                   Name
@@ -588,19 +598,20 @@ export default function PickupPoints() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 pt-4">
-                <button type="submit" className="admin-btn admin-btn-primary flex-1">
-                  {selectedPickup ? 'Update Pickup Point' : 'Create Pickup Point'}
-                </button>
+              <div className="modal-footer">
                 <button
                   type="button"
                   onClick={() => setShowPickupModal(false)}
-                  className="admin-btn admin-btn-secondary flex-1"
+                  className="admin-btn admin-btn-secondary"
                 >
                   Cancel
                 </button>
+                <button type="submit" className="admin-btn admin-btn-primary">
+                  {selectedPickup ? 'Update Pickup Point' : 'Create Pickup Point'}
+                </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

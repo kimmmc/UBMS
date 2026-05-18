@@ -440,10 +440,20 @@ export default function Routes() {
       {showRouteModal && (
         <div className="modal-overlay">
           <div className="modal-content max-w-2xl">
-            <h2 className="text-xl font-bold mb-4" style={{ color: theme.text }}>
-              {selectedRoute ? 'Edit Route' : 'Add New Route'}
-            </h2>
-            <form onSubmit={handleCreateRoute} className="admin-space-y-4">
+            <div className="modal-header">
+              <h2 className="modal-title">
+                {selectedRoute ? 'Edit Route' : 'Add New Route'}
+              </h2>
+              <button 
+                type="button" 
+                className="modal-close-btn"
+                onClick={() => setShowRouteModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleCreateRoute} className="admin-space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: theme.text }}>
                   Route Name
@@ -502,19 +512,20 @@ export default function Routes() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 pt-4">
-                <button type="submit" className="admin-btn admin-btn-primary flex-1">
-                  {selectedRoute ? 'Update Route' : 'Create Route'}
-                </button>
+              <div className="modal-footer">
                 <button
                   type="button"
                   onClick={() => setShowRouteModal(false)}
-                  className="admin-btn admin-btn-secondary flex-1"
+                  className="admin-btn admin-btn-secondary"
                 >
                   Cancel
                 </button>
+                <button type="submit" className="admin-btn admin-btn-primary">
+                  {selectedRoute ? 'Update Route' : 'Create Route'}
+                </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { Bus, Eye, EyeOff, Shield, Mail, Lock, ArrowLeft } from 'lucide-react';
+import { Bus, Eye, EyeOff, Shield, Mail, Lock , ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -126,95 +126,69 @@ export default function Login() {
       
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full">
-          {/* Header Section */}
-          <div className="text-center mb-8">
-            <div className="relative inline-block mb-6">
-              <div 
-                className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl relative overflow-hidden"
-                style={{ 
-                  backgroundColor: theme.primary,
-                  background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primary}DD 100%)`
-                }}
-              >
-                <Bus size={32} color="white" className="relative z-10" />
-                <div className="absolute inset-0 bg-white opacity-10 rounded-2xl transform rotate-45 scale-150"></div>
-              </div>
-              <div 
-                className="absolute -top-1 -right-1 w-3 h-3 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: '#10B981' }}
-              >
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-              </div>
-            </div>
-            
-            <h1 className="text-3xl font-black mb-2 tracking-tight" style={{ color: theme.text }}>
-              UBMS Admin
-            </h1>
-            <p className="text-lg font-medium" style={{ color: theme.textSecondary }}>
-              Professional Dashboard Management System
-            </p>
-            <div className="mt-3 flex items-center justify-center">
-              <div className="h-1 w-16 rounded-full" style={{ backgroundColor: theme.primary }}></div>
-            </div>
-          </div>
-
+        <div className="w-full sm:w-[80%] md:w-[50%] max-w-2xl">
           {/* Login Card */}
           <div 
-            className="relative rounded-2xl shadow-xl border backdrop-blur-sm overflow-hidden"
+            className="relative rounded-[32px] overflow-hidden"
             style={{ 
-              backgroundColor: theme.surface + 'F0',
-              borderColor: theme.border + '40'
+              backgroundColor: theme.surface,
+              boxShadow: `0 25px 50px -12px ${theme.primary}30, 0 0 0 1px ${theme.border}20`,
             }}
           >
-            {/* Card Header */}
-            <div 
-              className="px-6 py-4 border-b"
-              style={{ 
-                backgroundColor: theme.primary + '08',
-                borderColor: theme.border + '30'
-              }}
-            >
-              <div className="flex items-center justify-center">
-                <Shield size={18} style={{ color: theme.primary }} className="mr-2" />
-                <span className="text-base font-bold" style={{ color: theme.primary }}>
-                  Secure Administrator Access
-                </span>
+            <div className="p-10 sm:p-12">
+              {/* Header Section Inside Card */}
+              <div className="text-center mb-14">
+                <div className="flex justify-center mb-6">
+                  <div 
+                    className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${theme.primary} 0%, #0d4a56 100%)`
+                    }}
+                  >
+                    <Bus size={28} color="white" className="relative z-10" />
+                    <div className="absolute inset-0 bg-white opacity-10 transform rotate-45 scale-150"></div>
+                  </div>
+                </div>
+                
+                <h1 className="text-2xl font-bold mb-2 tracking-tight" style={{ color: theme.text }}>
+                  Welcome back
+                </h1>
+                <p className="text-sm" style={{ color: theme.textSecondary }}>
+                  Sign in to your admin dashboard
+                </p>
               </div>
-            </div>
 
-            {/* Card Body */}
-            <div className="px-6 py-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-10">
                 {/* Email Field */}
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <label 
                     htmlFor="email" 
-                    className="text-xs font-bold uppercase tracking-wide flex items-center"
+                    className="text-sm font-semibold flex items-center gap-2"
                     style={{ color: theme.text }}
                   >
-                    <Mail size={14} className="mr-2" style={{ color: theme.primary }} />
-                    Administrator Email
+                    <Mail size={16} style={{ color: theme.textSecondary }} />
+                    Enter the admin email
                   </label>
-                  <div className="relative group">
+                  <div className="relative">
                     <input
                       id="email"
                       name="email"
                       type="email"
                       autoComplete="email"
                       required
-                      className="w-full px-4 py-3 rounded-xl border text-base font-medium transition-all duration-300 focus:outline-none focus:scale-[1.01] group-hover:shadow-md"
+                      className="w-full px-4 py-3 rounded-xl border text-sm transition-all duration-200 focus:outline-none"
                       placeholder="admin@ubms.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       style={{
                         backgroundColor: theme.background,
-                        borderColor: theme.border,
+                        borderColor: theme.border + '60',
                         color: theme.text,
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = theme.primary;
-                        e.target.style.boxShadow = `0 0 0 4px ${theme.primary}15`;
+                        e.target.style.boxShadow = `0 0 0 3px ${theme.primary}15`;
                       }}
                       onBlur={(e) => {
                         e.target.style.borderColor = theme.border;
@@ -225,34 +199,34 @@ export default function Login() {
                 </div>
 
                 {/* Password Field */}
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <label 
                     htmlFor="password" 
-                    className="text-xs font-bold uppercase tracking-wide flex items-center"
+                    className="text-sm font-semibold flex items-center gap-2"
                     style={{ color: theme.text }}
                   >
-                    <Lock size={14} className="mr-2" style={{ color: theme.primary }} />
-                    Secure Password
+                    <Lock size={16} style={{ color: theme.textSecondary }} />
+                    Enter the password
                   </label>
-                  <div className="relative group">
+                  <div className="relative">
                     <input
                       id="password"
                       name="password"
                       type={showPassword ? 'text' : 'password'}
                       autoComplete="current-password"
                       required
-                      className="w-full px-4 py-3 pr-12 rounded-xl border text-base font-medium transition-all duration-300 focus:outline-none focus:scale-[1.01] group-hover:shadow-md"
-                      placeholder="Enter your secure password"
+                      className="w-full pl-4 pr-10 py-3 rounded-xl border text-sm transition-all duration-200 focus:outline-none"
+                      placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       style={{
                         backgroundColor: theme.background,
-                        borderColor: theme.border,
+                        borderColor: theme.border + '60',
                         color: theme.text,
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = theme.primary;
-                        e.target.style.boxShadow = `0 0 0 4px ${theme.primary}15`;
+                        e.target.style.boxShadow = `0 0 0 3px ${theme.primary}15`;
                       }}
                       onBlur={(e) => {
                         e.target.style.borderColor = theme.border;
@@ -261,49 +235,35 @@ export default function Login() {
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 rounded-lg transition-all duration-200 hover:scale-105"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 focus:outline-none hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
-                      style={{ 
-                        color: theme.textSecondary,
-                        backgroundColor: 'transparent',
-                        border: 'none'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = theme.primary + '15';
-                        e.currentTarget.style.color = theme.primary;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = theme.textSecondary;
-                      }}
+                      style={{ color: theme.textSecondary, border: 'none', background: 'transparent', outline: 'none', boxShadow: 'none' }}
                     >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {showPassword ? <EyeOff size={18} strokeWidth={1.5} className="hover:opacity-80 transition-opacity" /> : <Eye size={18} strokeWidth={1.5} className="hover:opacity-80 transition-opacity" />}
                     </button>
                   </div>
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-2">
+                <div className="pt-8">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full py-3.5 px-6 rounded-xl text-base font-bold transition-all duration-300 relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl"
+                    className="w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300 relative overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed hover:shadow-lg"
                     style={{
                       backgroundColor: theme.primary,
                       color: 'white',
                       border: 'none',
-                      transform: isLoading ? 'scale(0.98)' : 'scale(1)',
+                      transform: isLoading ? 'scale(0.99)' : 'scale(1)',
                     }}
                     onMouseEnter={(e) => {
                       if (!isLoading) {
-                        e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
-                        e.currentTarget.style.boxShadow = `0 15px 30px ${theme.primary}40`;
+                        e.currentTarget.style.transform = 'translateY(-1px)';
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isLoading) {
-                        e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.transform = 'translateY(0)';
                       }
                     }}
                   >
@@ -311,64 +271,30 @@ export default function Login() {
                     <div className="relative flex items-center justify-center">
                       {isLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                          Authenticating Access...
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Signing in...
                         </>
                       ) : (
-                        <>
-                          Access Admin Dashboard
-                          <ArrowLeft size={18} className="ml-2 transform rotate-180 group-hover:translate-x-1 transition-transform duration-300" />
-                        </>
+                        'Sign in'
                       )}
                     </div>
                   </button>
                 </div>
               </form>
             </div>
-
+            
             {/* Card Footer */}
             <div 
-              className="px-6 py-4 border-t text-center"
+              className="py-4 text-center border-t"
               style={{ 
-                backgroundColor: theme.surface + '80',
-                borderColor: theme.border + '30'
+                backgroundColor: theme.background + '50',
+                borderColor: theme.border + '40'
               }}
             >
-              <div 
-                className="inline-flex items-center justify-center p-3 rounded-xl mb-3"
-                style={{ backgroundColor: theme.primary + '10' }}
-              >
-                <div className="text-center">
-                  <p className="text-sm font-bold" style={{ color: theme.primary }}>
-                    🔒 Restricted Access Zone
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: theme.textSecondary }}>
-                    Authorized personnel only • Contact system admin for access
-                  </p>
-                </div>
+              <div className="flex items-center justify-center space-x-1.5 text-xs font-medium" style={{ color: theme.textSecondary }}>
+                <Shield size={12} />
+                <span>Secure Admin Portal</span>
               </div>
-              
-              <div className="flex items-center justify-center space-x-2 text-xs" style={{ color: theme.textSecondary }}>
-                <span className="font-semibold">UBMS Admin Dashboard</span>
-                <span>•</span>
-                <span>v1.0.0</span>
-                <span>•</span>
-                <span className="font-medium">Rwanda Bus Platform</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Security Notice */}
-          <div className="mt-6 text-center">
-            <div 
-              className="inline-flex items-center px-3 py-2 rounded-full text-xs font-medium"
-              style={{ 
-                backgroundColor: theme.primary + '15',
-                color: theme.primary
-              }}
-            >
-              <Shield size={12} className="mr-1.5" />
-              Enterprise-grade security enabled
             </div>
           </div>
         </div>

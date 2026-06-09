@@ -282,6 +282,16 @@ export default function Map() {
                 {selectedBus.eta} minutes
               </Text>
             </View>
+
+            <View style={styles.busDetailItem}>
+              <Users size={16} color={theme.primary} />
+              <Text style={[styles.busDetailLabel, { color: theme.textSecondary }]}>
+                Free Places:
+              </Text>
+              <Text style={[styles.busDetailValue, { color: theme.primary }]}>
+                {Math.max(0, (selectedBus.capacity || 0) - (selectedBus.currentPassengers || 0))}
+              </Text>
+            </View>
             
             {selectedBus.fare && (
               <View style={styles.busDetailItem}>

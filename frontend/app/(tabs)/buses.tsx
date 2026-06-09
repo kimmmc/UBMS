@@ -167,9 +167,19 @@ export default function Buses() {
           <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
             Capacity:
           </Text>
-                      <Text style={[styles.detailValue, { color: theme.text }]}>
-              {bus.capacity || 0}
-            </Text>
+          <Text style={[styles.detailValue, { color: theme.text }]}>
+            {bus.capacity || 0}
+          </Text>
+        </View>
+
+        <View style={styles.detailItem}>
+          <Users size={16} color={theme.primary} />
+          <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
+            Free Places:
+          </Text>
+          <Text style={[styles.detailValue, { color: theme.primary }]}>
+            {Math.max(0, (bus.capacity || 0) - (bus.currentPassengers || 0))}
+          </Text>
         </View>
 
         {bus.fare && (

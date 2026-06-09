@@ -151,10 +151,10 @@ export default function Login() {
                 </div>
                 
                 <h1 className="text-2xl font-bold mb-2 tracking-tight" style={{ color: theme.text }}>
-                  Welcome back
+                  Welcome to UBMS
                 </h1>
                 <p className="text-sm" style={{ color: theme.textSecondary }}>
-                  Sign in to your admin dashboard
+                  UBMS simplifies campus transportation with real-time bus tracking, automated scheduling, and seamless route management.
                 </p>
               </div>
 

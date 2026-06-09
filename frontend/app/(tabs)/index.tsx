@@ -119,7 +119,7 @@ export default function Home() {
           <View style={styles.statItem}>
             <Users size={16} color={theme.textSecondary} />
             <Text style={[styles.passengersText, { color: theme.textSecondary }]}>
-              {bus.capacity}
+              {Math.max(0, (bus.capacity || 0) - (bus.currentPassengers || 0))} free
             </Text>
           </View>
         </View>

@@ -41,11 +41,15 @@ export default function Login() {
           <ArrowLeft color={theme.text} size={24} />
         </Pressable>
         <Text style={[styles.title, { color: theme.text }]}>
-          Driver Login
+          Welcome to UBMS
         </Text>
       </View>
 
       <View style={styles.form}>
+        <Text style={[styles.welcomeSubtitle, { color: theme.textSecondary }]}>
+          UBMS simplifies campus transportation with real-time bus tracking, automated scheduling, and seamless route management.
+        </Text>
+
         <View style={styles.securityNotice}>
           <Shield size={20} color={theme.primary} />
           <Text style={[styles.securityText, { color: theme.textSecondary }]}>
@@ -145,6 +149,13 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontFamily: 'Inter-Bold',
     letterSpacing: -0.5,
+  },
+  welcomeSubtitle: {
+    fontSize: 15,
+    fontFamily: 'Inter-Regular',
+    opacity: 0.8,
+    lineHeight: 22,
+    marginBottom: 24,
   },
   form: {
     flex: 1,

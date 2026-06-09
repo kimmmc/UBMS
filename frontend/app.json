@@ -50,7 +50,13 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/53458e2e-487a-4590-8a65-79b0cfd81c03"
+      "url": "https://u.expo.dev/a7e07b76-667c-4a78-aaa1-435490d69cc8"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a7e07b76-667c-4a78-aaa1-435490d69cc8"
+      }
     }
   }
 }

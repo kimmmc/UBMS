@@ -62,10 +62,10 @@ export default function Login() {
           <View style={styles.form}>
             <View style={styles.welcomeContainer}>
               <Text style={[styles.welcomeTitle, { color: theme.text }]}>
-                Welcome Back
+                Welcome to UBMS
               </Text>
               <Text style={[styles.welcomeSubtitle, { color: theme.textSecondary }]}>
-                Sign in to continue tracking buses
+                UBMS simplifies campus transportation with real-time bus tracking, automated scheduling, and seamless route management.
               </Text>
             </View>
 

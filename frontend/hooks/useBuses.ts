@@ -142,54 +142,6 @@ export function useBuses(userLocation?: { latitude: number; longitude: number },
 
       console.log('Fetching buses from your database...');
 
-      if (userLocation && showNearbyOnly) {
-        // For nearby buses only (home page) - only online buses within 6km
-        try {
-          const response = await apiService.getNearbyBuses(
-            userLocation.latitude,
-            userLocation.longitude,
-            6 // km radius for nearby
-          );
-          console.log('Found nearby online buses:', response.buses.length);
-          
-          // Get schedules to add schedule information to nearby buses
-          const schedulesResponse = await apiService.getBusSchedules();
-          const schedules = schedulesResponse.schedules;
-          
-          const transformedBuses = response.buses.map(apiBus => {
-            // Find the next/active schedule for this bus
-            const busSchedules = schedules.filter(s => {
-              if (typeof s.busId === 'string') return s.busId === apiBus.id;
-              if (s.busId && s.busId._id) return s.busId._id === apiBus.id;
-              return false;
-            });
-            const schedule = busSchedules[0];
-            let scheduleId: string | undefined = undefined;
-            let pickupPointId: string | undefined = undefined;
-            if (schedule) {
-              scheduleId = schedule._id;
-              if (schedule.estimatedArrivalTimes && schedule.estimatedArrivalTimes.length > 0) {
-                const pickup = schedule.estimatedArrivalTimes[0];
-                if (pickup && pickup.pickupPointId) {
-                  pickupPointId = typeof pickup.pickupPointId === 'string' ? pickup.pickupPointId : pickup.pickupPointId._id;
-                }
-              }
-            }
-            
-            return {
-              ...transformApiBusToFrontendBus(apiBus),
-              scheduleId,
-              pickupPointId,
-            };
-          });
-          
-          setBuses(transformedBuses);
-          return;
-        } catch (nearbyError) {
-          console.log('Nearby buses API failed, trying all buses:', nearbyError);
-        }
-      }
-
       // Fetch all buses from your database - show all buses for main list
       const response = await apiService.getBuses(); // This now returns all active buses
       const schedulesResponse = await apiService.getBusSchedules();
@@ -234,10 +186,9 @@ export function useBuses(userLocation?: { latitude: number; longitude: number },
           };
         });
 
-      // For home page, show nearby buses (within 10km) but be more lenient
+      // For home page, show closest buses
       if (showNearbyOnly && userLocation) {
         transformedBuses = transformedBuses
-          .filter(bus => !bus.distance || bus.distance <= 10) // Within 10km for home
           .sort((a, b) => (a.distance || 999) - (b.distance || 999))
           .slice(0, 8); // Limit to 8 buses for home page
       } else {

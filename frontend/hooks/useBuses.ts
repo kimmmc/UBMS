@@ -93,8 +93,8 @@ export function useBuses(userLocation?: { latitude: number; longitude: number },
       eta,
       capacity: backendBus.capacity, // Use actual capacity from database
       currentPassengers: Math.floor(Math.random() * (backendBus.capacity || 25)),
-      isActive: backendBus.isActive && backendBus.isOnline,
-      isOnline: backendBus.isOnline, // Include online status
+      isActive: backendBus.isActive, // Match admin portal status
+      isOnline: backendBus.isOnline, // Keep track of actual driver online status separately
       interested: Math.floor(Math.random() * 10),
       fare: backendBus.routeId?.fare || 400, // Get fare from route only
       schedule: '05:00–23:00', // You can enhance this with actual schedule data
@@ -117,9 +117,9 @@ export function useBuses(userLocation?: { latitude: number; longitude: number },
       },
       nextStop: 'Next Stop',
       eta: apiBus.distance ? Math.max(Math.floor(apiBus.distance * 3), 2) : Math.floor(Math.random() * 20) + 5,
-      capacity: 30,
-      currentPassengers: Math.floor(Math.random() * 25),
-      isActive: apiBus.isOnline,
+      capacity: apiBus.capacity || 25,
+      currentPassengers: Math.floor(Math.random() * (apiBus.capacity || 25)),
+      isActive: true, // If it comes from API, it's active
       isOnline: apiBus.isOnline, // Include online status
       interested: Math.floor(Math.random() * 10),
       fare: apiBus.route?.fare || 400, // Get fare from route

@@ -8,12 +8,14 @@ const Route_1 = __importDefault(require("../models/Route"));
 const PickupPoint_1 = __importDefault(require("../models/PickupPoint"));
 const createRoute = async (req, res) => {
     try {
-        const { name, description, estimatedDuration, fare } = req.body;
+        const { name, description, estimatedDuration, fare, origin, destination } = req.body;
         const route = new Route_1.default({
             name,
             description,
             estimatedDuration,
             fare,
+            origin: origin || 'Unknown',
+            destination: destination || 'Unknown',
         });
         await route.save();
         res.status(201).json({
@@ -22,7 +24,8 @@ const createRoute = async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        console.error('Error creating route:', error);
+        res.status(500).json({ error: error.message || 'Server error' });
     }
 };
 exports.createRoute = createRoute;
@@ -53,10 +56,16 @@ const getRouteById = async (req, res) => {
 exports.getRouteById = getRouteById;
 const updateRoute = async (req, res) => {
     try {
-        const { name, description, estimatedDuration, fare } = req.body;
+        const { name, description, estimatedDuration, fare, origin, destination } = req.body;
         const updateData = { name, description, estimatedDuration };
         if (fare !== undefined) {
             updateData.fare = fare;
+        }
+        if (origin !== undefined) {
+            updateData.origin = origin;
+        }
+        if (destination !== undefined) {
+            updateData.destination = destination;
         }
         const route = await Route_1.default.findByIdAndUpdate(req.params.id, updateData, { new: true }).populate('pickupPoints');
         if (!route) {
@@ -68,6 +77,7 @@ const updateRoute = async (req, res) => {
         });
     }
     catch (error) {
+        console.error('Error updating route:', error);
         res.status(500).json({ error: 'Server error' });
     }
 };

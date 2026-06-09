@@ -49,12 +49,16 @@ exports.validateBus = validateBus;
 const validateRoute = (req, res, next) => {
     const schema = joi_1.default.object({
         name: joi_1.default.string().required(),
-        description: joi_1.default.string().optional(),
+        description: joi_1.default.string().allow('').optional(),
         estimatedDuration: joi_1.default.number().required().min(1),
         fare: joi_1.default.number().optional().min(0),
+        origin: joi_1.default.string().allow('').required(),
+        destination: joi_1.default.string().allow('').required(),
     });
+    console.log('validateRoute called with body:', req.body);
     const { error } = schema.validate(req.body);
     if (error) {
+        console.error('validateRoute ERROR:', error.details[0].message);
         return res.status(400).json({ error: error.details[0].message });
     }
     next();

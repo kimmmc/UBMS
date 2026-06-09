@@ -63,7 +63,7 @@ const predictions_1 = __importDefault(require("./routes/predictions"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3005;
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
     max: 1000,
@@ -214,7 +214,7 @@ const startServer = async () => {
         socketService_1.default.initialize(server);
         (0, locationScheduler_1.startLocationScheduler)();
         (0, locationScheduler_1.startLocationHistoryCleanup)();
-        server.listen(PORT, () => {
+        server.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 Server running on port ${PORT}`);
             console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
             console.log(`🔍 Health Check: http://localhost:${PORT}/health`);

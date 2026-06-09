@@ -21,9 +21,9 @@ export const createRoute = async (req: Request, res: Response): Promise<any> => 
       message: 'Route created successfully',
       route,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating route:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: error.message || 'Server error' });
   }
 };
 

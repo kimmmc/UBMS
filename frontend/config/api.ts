@@ -4,10 +4,10 @@ import { Platform } from 'react-native';
 export const API_CONFIG = {
   // Backend API URL - adjust based on your environment
   BASE_URL: Platform.select({
-    ios: 'https://final001-1.onrender.com/api',
-    android: 'https://final001-1.onrender.com/api',
-    web: 'https://final001-1.onrender.com/api',
-    default: 'https://final001-1.onrender.com/api',
+    ios: 'https://ubms-p9jp.onrender.com/api',
+    android: 'https://ubms-p9jp.onrender.com/api',
+    web: 'https://ubms-p9jp.onrender.com/api',
+    default: 'https://ubms-p9jp.onrender.com/api',
   }),
 
   // Request timeout in milliseconds
@@ -20,5 +20,5 @@ export const API_CONFIG = {
 
 // Environment-specific configurations
 export const getApiUrl = () => {
-  return API_CONFIG.BASE_URL || 'https://final001-1.onrender.com/api';
+  return API_CONFIG.BASE_URL || 'https://ubms-p9jp.onrender.com/api';
 };

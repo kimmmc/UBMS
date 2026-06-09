@@ -132,7 +132,7 @@ export const getDriverBus = async (req: Request, res: Response): Promise<any> =>
 
 export const updateBus = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { plateNumber, capacity, driverId, routeId } = req.body;
+    const { plateNumber, capacity, driverId, routeId, isActive, isOnline } = req.body;
 
     // Verify driver if provided
     if (driverId) {
@@ -151,6 +151,8 @@ export const updateBus = async (req: Request, res: Response): Promise<any> => {
     }
 
     const updateData: any = { plateNumber, capacity, driverId, routeId };
+    if (isActive !== undefined) updateData.isActive = isActive;
+    if (isOnline !== undefined) updateData.isOnline = isOnline;
 
     const bus = await Bus.findByIdAndUpdate(
       req.params.id,

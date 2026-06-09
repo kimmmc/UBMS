@@ -55,6 +55,8 @@ export default function Buses() {
     capacity: '',
     driverId: '',
     routeId: '',
+    isActive: true,
+    isOnline: false,
   });
 
   useEffect(() => {
@@ -111,6 +113,8 @@ export default function Buses() {
         capacity: parseInt(formData.capacity),
         driverId: formData.driverId,
         routeId: formData.routeId,
+        isActive: formData.isActive,
+        isOnline: formData.isOnline,
       };
 
       if (selectedBus) {
@@ -128,6 +132,8 @@ export default function Buses() {
         capacity: '',
         driverId: '',
         routeId: '',
+        isActive: true,
+        isOnline: false,
       });
       fetchBuses();
     } catch (err: any) {
@@ -143,6 +149,8 @@ export default function Buses() {
       capacity: bus.capacity.toString(),
       driverId: typeof bus.driverId === 'string' ? bus.driverId : bus.driverId?._id || '',
       routeId: typeof bus.routeId === 'string' ? bus.routeId : bus.routeId?._id || '',
+      isActive: bus.isActive,
+      isOnline: bus.isOnline,
     });
     setShowBusModal(true);
   };
@@ -207,6 +215,8 @@ export default function Buses() {
               capacity: '',
               driverId: '',
               routeId: '',
+              isActive: true,
+              isOnline: false,
             });
             setShowBusModal(true);
           }}
@@ -631,7 +641,34 @@ export default function Buses() {
                 </select>
               </div>
 
-
+              {selectedBus && (
+                <div className="admin-grid admin-grid-2">
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      id="isActive"
+                      checked={formData.isActive}
+                      onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                      className="w-4 h-4"
+                    />
+                    <label htmlFor="isActive" className="text-sm font-medium" style={{ color: theme.text }}>
+                      Active (System Status)
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      id="isOnline"
+                      checked={formData.isOnline}
+                      onChange={(e) => setFormData({ ...formData, isOnline: e.target.checked })}
+                      className="w-4 h-4"
+                    />
+                    <label htmlFor="isOnline" className="text-sm font-medium" style={{ color: theme.text }}>
+                      Online (Driver App Status)
+                    </label>
+                  </div>
+                </div>
+              )}
 
               <div className="modal-footer">
                 <button

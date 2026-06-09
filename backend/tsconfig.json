@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["ES2020", "DOM"],
@@ -20,14 +19,9 @@
     "noImplicitThis": false,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": false,
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*", "src/types/globals.d.ts"],
   "exclude": ["node_modules", "dist"]

@@ -291,6 +291,8 @@ class ApiService {
     description?: string;
     estimatedDuration: number;
     fare?: number;
+    origin: string;
+    destination: string;
   }) {
     return this.request<{
       message: string;
@@ -306,6 +308,8 @@ class ApiService {
     description?: string;
     estimatedDuration?: number;
     fare?: number;
+    origin?: string;
+    destination?: string;
   }) {
     return this.request<{
       message: string;

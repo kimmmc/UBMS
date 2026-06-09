@@ -1,14 +1,28 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Home, Map, Bus, Settings } from 'lucide-react-native';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
 
 export default function TabLayout() {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const { user, loading } = useAuth();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/auth');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return null;
+  }
 
   return (
     <Tabs

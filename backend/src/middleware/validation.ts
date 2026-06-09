@@ -48,13 +48,17 @@ export const validateBus = (req: Request, res: Response, next: NextFunction): an
 export const validateRoute = (req: Request, res: Response, next: NextFunction): any => {
   const schema = Joi.object({
     name: Joi.string().required(),
-    description: Joi.string().optional(),
+    description: Joi.string().allow('').optional(),
     estimatedDuration: Joi.number().required().min(1),
     fare: Joi.number().optional().min(0),
+    origin: Joi.string().allow('').required(),
+    destination: Joi.string().allow('').required(),
   });
 
+  console.log('validateRoute called with body:', req.body);
   const { error } = schema.validate(req.body);
   if (error) {
+    console.error('validateRoute ERROR:', error.details[0].message);
     return res.status(400).json({ error: error.details[0].message });
   }
   next();

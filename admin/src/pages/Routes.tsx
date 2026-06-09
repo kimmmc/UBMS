@@ -21,6 +21,8 @@ interface Route {
   pickupPoints: any[];
   estimatedDuration: number;
   fare: number;
+  origin: string;
+  destination: string;
   isActive: boolean;
   createdAt: string;
 }
@@ -38,6 +40,8 @@ export default function Routes() {
     description: '',
     estimatedDuration: '',
     fare: '',
+    origin: '',
+    destination: '',
   });
 
   useEffect(() => {
@@ -63,7 +67,7 @@ export default function Routes() {
   const handleCreateRoute = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.estimatedDuration) {
+    if (!formData.name || !formData.estimatedDuration || !formData.origin || !formData.destination) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -73,6 +77,8 @@ export default function Routes() {
         name: formData.name,
         description: formData.description,
         estimatedDuration: parseInt(formData.estimatedDuration),
+        origin: formData.origin,
+        destination: formData.destination,
         ...(formData.fare && { fare: parseInt(formData.fare) }),
       };
 
@@ -91,6 +97,8 @@ export default function Routes() {
         description: '',
         estimatedDuration: '',
         fare: '',
+        origin: '',
+        destination: '',
       });
       fetchRoutes();
     } catch (err: any) {
@@ -106,6 +114,8 @@ export default function Routes() {
       description: route.description,
       estimatedDuration: route.estimatedDuration.toString(),
       fare: route.fare.toString(),
+      origin: route.origin || '',
+      destination: route.destination || '',
     });
     setShowRouteModal(true);
   };
@@ -162,6 +172,8 @@ export default function Routes() {
               description: '',
               estimatedDuration: '',
               fare: '',
+              origin: '',
+              destination: '',
             });
             setShowRouteModal(true);
           }}
@@ -479,6 +491,36 @@ export default function Routes() {
                   placeholder="e.g., Kimironko - Downtown/CBD"
                   rows={3}
                 />
+              </div>
+
+              <div className="admin-grid admin-grid-2">
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: theme.text }}>
+                    Origin
+                  </label>
+                  <input
+                    type="text"
+                    className="admin-input"
+                    value={formData.origin}
+                    onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
+                    placeholder="e.g., Kimironko"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1" style={{ color: theme.text }}>
+                    Destination
+                  </label>
+                  <input
+                    type="text"
+                    className="admin-input"
+                    value={formData.destination}
+                    onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                    placeholder="e.g., Downtown"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="admin-grid admin-grid-2">

@@ -4,13 +4,15 @@ import PickupPoint from '../models/PickupPoint';
 
 export const createRoute = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, description, estimatedDuration, fare } = req.body;
+    const { name, description, estimatedDuration, fare, origin, destination } = req.body;
 
     const route = new Route({
       name,
       description,
       estimatedDuration,
       fare,
+      origin: origin || 'Unknown', // Fallback if not provided
+      destination: destination || 'Unknown', // Fallback if not provided
     });
 
     await route.save();
@@ -20,6 +22,7 @@ export const createRoute = async (req: Request, res: Response): Promise<any> => 
       route,
     });
   } catch (error) {
+    console.error('Error creating route:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -52,11 +55,17 @@ export const getRouteById = async (req: Request, res: Response): Promise<any> =>
 
 export const updateRoute = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, description, estimatedDuration, fare } = req.body;
+    const { name, description, estimatedDuration, fare, origin, destination } = req.body;
 
     const updateData: any = { name, description, estimatedDuration };
     if (fare !== undefined) {
       updateData.fare = fare;
+    }
+    if (origin !== undefined) {
+      updateData.origin = origin;
+    }
+    if (destination !== undefined) {
+      updateData.destination = destination;
     }
 
     const route = await Route.findByIdAndUpdate(
@@ -74,6 +83,7 @@ export const updateRoute = async (req: Request, res: Response): Promise<any> => 
       route,
     });
   } catch (error) {
+    console.error('Error updating route:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };

@@ -1,15 +1,16 @@
 import cron from 'node-cron';
 import Bus from '../models/Bus';
 
-// Function to mark buses as offline if they haven't updated location in 5+ minutes
+// Function to mark buses as offline if they haven't updated location recently
 const checkOfflineBuses = async () => {
   try {
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    // Increased to 24 hours for development/testing so buses don't keep reverting to inactive
+    const timeoutThreshold = new Date(Date.now() - 24 * 60 * 60 * 1000);
     
     await Bus.updateMany(
       {
         isOnline: true,
-        'currentLocation.lastUpdated': { $lt: fiveMinutesAgo }
+        'currentLocation.lastUpdated': { $lt: timeoutThreshold }
       },
       { isOnline: false }
     );

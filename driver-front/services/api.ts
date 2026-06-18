@@ -1,6 +1,28 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_CONFIG, getApiUrl } from '@/config/api';
 
+// Requests that should NOT be retried (mutations that could cause duplicates)
+const NON_RETRYABLE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+
+// Network/transient errors that are safe to retry
+const isRetryableError = (error: any): boolean => {
+  if (!error) return false;
+  const msg = String(error?.message || error).toLowerCase();
+  return (
+    msg.includes('network request failed') ||
+    msg.includes('fetch failed') ||
+    msg.includes('network error') ||
+    msg.includes('etimedout') ||
+    msg.includes('econnreset') ||
+    msg.includes('econnrefused') ||
+    msg.includes('failed to fetch') ||
+    msg.includes('aborted') ||
+    msg.includes('timeout')
+  );
+};
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 class ApiService {
   private baseURL: string;
 
@@ -18,35 +40,85 @@ class ApiService {
     }
   }
 
+  /**
+   * Core request method with:
+   *  - AbortController-based timeout (avoids hanging forever)
+   *  - Exponential backoff retry for GET requests and network errors
+   */
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retries = API_CONFIG.MAX_RETRIES
   ): Promise<T> {
     const token = await this.getAuthToken();
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-      ...options,
-    };
-
+    const method = (options.method || 'GET').toUpperCase();
     const url = `${this.baseURL}${endpoint}`;
-    console.log(`Driver API Request: ${options.method || 'GET'} ${url}`);
 
-    const response = await fetch(url, config);
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error(`Driver API Error: ${response.status}`, errorData);
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+    // Only retry GET requests automatically to avoid duplicate mutations
+    const canRetry = !NON_RETRYABLE_METHODS.has(method);
+
+    let lastError: any;
+
+    for (let attempt = 0; attempt <= (canRetry ? retries : 0); attempt++) {
+      // Exponential backoff: 0ms, 1s, 2s, 4s …
+      if (attempt > 0) {
+        const delay = API_CONFIG.RETRY_DELAY * Math.pow(2, attempt - 1);
+        console.log(`Driver API retry ${attempt}/${retries} for ${method} ${endpoint} in ${delay}ms`);
+        await sleep(delay);
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
+
+      try {
+        const config: RequestInit = {
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
+            ...options.headers,
+          },
+          signal: controller.signal,
+          ...options,
+        };
+
+        console.log(`Driver API Request [attempt ${attempt + 1}]: ${method} ${url}`);
+        const response = await fetch(url, config);
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error(`Driver API Error: ${response.status}`, errorData);
+          // 5xx errors may be worth retrying; 4xx are not
+          if (response.status >= 500 && canRetry && attempt < retries) {
+            lastError = new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            continue;
+          }
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(`Driver API Response: ${method} ${endpoint}`, data);
+        return data;
+
+      } catch (error: any) {
+        clearTimeout(timeoutId);
+
+        const isAbortError = error?.name === 'AbortError';
+        const networkErr = isAbortError
+          ? new Error('Request timed out. The server may be waking up, please try again.')
+          : error;
+
+        if ((isRetryableError(error) || isAbortError) && canRetry && attempt < retries) {
+          lastError = networkErr;
+          continue;
+        }
+
+        throw networkErr;
+      }
     }
 
-    const data = await response.json();
-    console.log(`Driver API Response: ${options.method || 'GET'} ${endpoint}`, data);
-    return data;
+    throw lastError ?? new Error('Request failed after retries');
   }
 
   // Authentication
@@ -206,7 +278,6 @@ class ApiService {
     });
   }
 
-
   async updateArrivalTime(scheduleId: string, pickupPointId: string, actualTime: Date) {
     return this.request<{
       message: string;
@@ -259,7 +330,7 @@ class ApiService {
     if (status) params.append('status', status);
     if (routeId) params.append('routeId', routeId);
     if (date) params.append('date', date);
-    
+
     const query = params.toString() ? `?${params.toString()}` : '';
     return this.request<{
       schedules: Array<{
@@ -276,8 +347,6 @@ class ApiService {
       }>;
     }>(`/bus-schedules${query}`);
   }
-
-
 }
 
 export const apiService = new ApiService();

@@ -245,6 +245,10 @@ export function useDriverData() {
     fetchDriverData();
   };
 
+  const updatePassengerStatusLocally = (interestId: string, newStatus: string) => {
+    setPassengers(prev => prev.map(p => p.id === interestId ? { ...p, status: newStatus } : p));
+  };
+
   return { 
     bus, 
     schedules, 
@@ -254,6 +258,7 @@ export function useDriverData() {
     error, 
     refetch, 
     updateOnlineStatus, 
-    updateBusLocation 
+    updateBusLocation,
+    updatePassengerStatusLocally
   };
 }

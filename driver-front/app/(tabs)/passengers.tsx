@@ -4,12 +4,12 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useDriverData } from '@/hooks/useDriverData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useState } from 'react';
-import { Users, MapPin, Clock, Filter, CheckCircle, XCircle, UserCheck, UserX, UserPlus, RefreshCw } from 'lucide-react-native';
+import { Users, MapPin, Clock, Filter, CheckCircle, XCircle, UserCheck, UserX, UserPlus, RefreshCw, Bus } from 'lucide-react-native';
 import { apiService } from '@/services/api';
 
 export default function Passengers() {
   const { theme } = useTheme();
-  const { passengers, schedules, loading, refetch } = useDriverData();
+  const { bus, passengers, schedules, loading, refetch, updatePassengerStatusLocally } = useDriverData();
   const { t } = useLanguage();
   const [filter, setFilter] = useState<'all' | 'interested' | 'confirmed'>('all');
   const [updatingInterest, setUpdatingInterest] = useState<string | null>(null);
@@ -17,12 +17,14 @@ export default function Passengers() {
   const handleConfirmInterest = async (interestId: string, passengerName: string) => {
     try {
       setUpdatingInterest(interestId);
+      updatePassengerStatusLocally(interestId, 'confirmed');
+      
       await apiService.updateUserInterestStatus(interestId, 'confirmed');
-      Alert.alert(t('common.success'), `${passengerName} ${t('passengers.confirmed')}!`);
-      refetch(); // Refresh the data
+      refetch(); // Refresh the data in background
     } catch (error: any) {
       console.error('Error confirming interest:', error);
       Alert.alert(t('common.error'), error.message || t('passengers.no.found'));
+      refetch(); // Revert on error
     } finally {
       setUpdatingInterest(null);
     }
@@ -31,12 +33,14 @@ export default function Passengers() {
   const handleDenyInterest = async (interestId: string, passengerName: string) => {
     try {
       setUpdatingInterest(interestId);
+      updatePassengerStatusLocally(interestId, 'cancelled');
+      
       await apiService.updateUserInterestStatus(interestId, 'cancelled');
-      Alert.alert(t('common.success'), `${passengerName} ${t('passengers.deny')}.`);
-      refetch(); // Refresh the data
+      refetch(); // Refresh the data in background
     } catch (error: any) {
       console.error('Error denying interest:', error);
       Alert.alert(t('common.error'), error.message || t('passengers.no.found'));
+      refetch(); // Revert on error
     } finally {
       setUpdatingInterest(null);
     }
@@ -261,6 +265,20 @@ export default function Passengers() {
               </Text>
             </View>
           </View>
+
+          <View style={[styles.summaryCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+            <View style={[styles.summaryIcon, { backgroundColor: '#2196F3' + '15' }]}>
+              <Bus size={24} color="#2196F3" />
+            </View>
+            <View style={styles.summaryContent}>
+              <Text style={[styles.summaryNumber, { color: theme.text }]}>
+                {bus ? bus.capacity - passengers.filter(p => p.status === 'confirmed').length : 0}
+              </Text>
+              <Text style={[styles.summaryLabel, { color: theme.textSecondary }]}>
+                {t('passengers.free.seats')}
+              </Text>
+            </View>
+          </View>
         </View>
 
         {/* Filters */}
@@ -345,12 +363,13 @@ const styles = StyleSheet.create({
   },
   summaryCards: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     paddingHorizontal: 24,
     marginBottom: 24,
     gap: 12,
   },
   summaryCard: {
-    flex: 1,
+    width: '47%',
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,

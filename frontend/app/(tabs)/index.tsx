@@ -105,7 +105,7 @@ export default function Home() {
           )}
           {bus.distance && (
             <Text style={[styles.distanceText, { color: theme.primary }]}>
-              {(bus.distance || 0).toFixed(1)} km away
+              {(bus.distance || 0).toFixed(1)} {t('kmAway')}
             </Text>
           )}
         </View>
@@ -119,7 +119,7 @@ export default function Home() {
           <View style={styles.statItem}>
             <Users size={16} color={theme.textSecondary} />
             <Text style={[styles.passengersText, { color: theme.textSecondary }]}>
-              {Math.max(0, (bus.capacity || 0) - (bus.currentPassengers || 0))} free
+              {Math.max(0, (bus.capacity || 0) - (bus.currentPassengers || 0))} {t('freeSeats')}
             </Text>
           </View>
         </View>
@@ -151,8 +151,8 @@ export default function Home() {
             styles.interestText,
             { color: getInterestStatus(bus.id) !== 'none' ? theme.background : theme.primary }
           ]}>
-            {getInterestStatus(bus.id) === 'confirmed' ? 'Confirmed' : 
-             getInterestStatus(bus.id) === 'interested' ? 'Interested' : 'Show Interest'}
+            {getInterestStatus(bus.id) === 'confirmed' ? t('confirmed') : 
+             getInterestStatus(bus.id) === 'interested' ? t('interested') : t('showInterest')}
           </Text>
         </Pressable>
       </View>
@@ -172,7 +172,7 @@ export default function Home() {
             onPress={refetch}
           >
             <Text style={[styles.retryButtonText, { color: theme.background }]}>
-              Retry
+              {t('retry')}
             </Text>
           </Pressable>
         </View>
@@ -186,7 +186,7 @@ export default function Home() {
         <View style={styles.header}>
           <View>
             <Text style={[styles.greeting, { color: theme.textSecondary }]}>
-              Welcome back,
+              {t('welcomeBack')}
             </Text>
             <Text style={[styles.userName, { color: theme.text }]}>
               {user?.name || 'User'}
@@ -201,14 +201,14 @@ export default function Home() {
               <>
                 <Navigation size={16} color={theme.primary} />
                 <Text style={[styles.locationButtonText, { color: theme.primary }]}>
-                  Located
+                  {t('located')}
                 </Text>
               </>
             ) : (
               <>
                 <AlertCircle size={16} color={theme.error} />
                 <Text style={[styles.locationButtonText, { color: theme.error }]}>
-                  Enable Location
+                  {t('enableLocation')}
                 </Text>
               </>
             )}
@@ -221,7 +221,7 @@ export default function Home() {
               {buses.length}
             </Text>
             <Text style={[styles.statLabel, { color: theme.textSecondary }]}>
-              Nearby Buses
+              {t('nearbyBuses')}
             </Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: theme.surface }]}>
@@ -229,7 +229,7 @@ export default function Home() {
               {buses.length > 0 ? Math.min(...buses.map(b => b.eta || 0)) : 0}m
             </Text>
             <Text style={[styles.statLabel, { color: theme.textSecondary }]}>
-              Nearest Bus
+              {t('nearestBus')}
             </Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: theme.surface }]}>
@@ -237,14 +237,14 @@ export default function Home() {
               {interests?.length || 0}
             </Text>
             <Text style={[styles.statLabel, { color: theme.textSecondary }]}>
-              Interested
+              {t('interested')}
             </Text>
           </View>
         </View>
 
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.text }]}>
-            Buses Near You
+            {t('busesNearYou')}
           </Text>
           {buses.length > 0 ? (
             <FlatList
@@ -258,10 +258,10 @@ export default function Home() {
             <View style={[styles.emptyState, { backgroundColor: theme.surface }]}>
               <MapPin size={48} color={theme.textSecondary} />
               <Text style={[styles.emptyStateText, { color: theme.text }]}>
-                No nearby buses found
+                {t('noNearbyBuses')}
               </Text>
               <Text style={[styles.emptyStateSubtext, { color: theme.textSecondary }]}>
-                {location ? 'Try expanding your search area or check the Buses tab for all available buses' : 'Enable location to find buses near you'}
+                {location ? t('tryExpandSearch') : t('enableLocationPrompt')}
               </Text>
             </View>
           )}

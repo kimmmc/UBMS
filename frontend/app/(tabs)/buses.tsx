@@ -86,10 +86,10 @@ export default function Buses() {
   };
 
   const getStatusText = (bus: BusType) => {
-    if (!bus.isActive) return 'Inactive';
-    if (bus.eta <= 5) return 'Arriving Soon';
-    if (bus.eta <= 10) return 'Nearby';
-    return 'En Route';
+    if (!bus.isActive) return t('inactiveStatus');
+    if (bus.eta <= 5) return t('arrivingSoonStatus');
+    if (bus.eta <= 10) return t('nearbyStatus');
+    return t('enRouteStatus');
   };
 
   const renderFilterButton = (filterType: 'all' | 'active' | 'nearby' | 'affordable', label: string) => (
@@ -139,7 +139,7 @@ export default function Buses() {
           )}
           {bus.distance && (
             <Text style={[styles.distanceText, { color: theme.primary }]}>
-              {`${(bus.distance || 0).toFixed(1)} km away`}
+              {`${(bus.distance || 0).toFixed(1)} ${t('kmAway')}`}
             </Text>
           )}
         </View>
@@ -155,17 +155,17 @@ export default function Buses() {
         <View style={styles.detailItem}>
           <Clock size={16} color={theme.primary} />
           <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
-            ETA:
+            {t('eta')}:
           </Text>
                       <Text style={[styles.detailValue, { color: theme.text }]}>
-              {bus.eta || 0} min
+              {bus.eta || 0} {t('minLabel')}
             </Text>
         </View>
         
         <View style={styles.detailItem}>
           <Users size={16} color={theme.textSecondary} />
           <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
-            Capacity:
+            {t('capacityLabel')}
           </Text>
           <Text style={[styles.detailValue, { color: theme.text }]}>
             {bus.capacity || 0}
@@ -175,7 +175,7 @@ export default function Buses() {
         <View style={styles.detailItem}>
           <Users size={16} color={theme.primary} />
           <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
-            Free Places:
+            {t('freePlacesLabel')}
           </Text>
           <Text style={[styles.detailValue, { color: theme.primary }]}>
             {Math.max(0, (bus.capacity || 0) - (bus.currentPassengers || 0))}
@@ -185,7 +185,7 @@ export default function Buses() {
         {bus.fare && (
           <View style={styles.detailItem}>
             <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
-              Fare:
+              {t('fareLabel')}
             </Text>
             <Text style={[styles.detailValue, { color: theme.primary }]}>
               {bus.fare || 0} RWF
@@ -211,7 +211,7 @@ export default function Buses() {
             onPress={refetch}
           >
             <Text style={[styles.retryButtonText, { color: theme.background }]}>
-              Retry
+              {t('retry')}
             </Text>
           </Pressable>
         </View>
@@ -224,10 +224,10 @@ export default function Buses() {
       <View style={styles.header}>
         <View>
           <Text style={[styles.title, { color: theme.text }]}>
-            All Available Buses
+            {t('allAvailableBuses')}
           </Text>
           <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            {`${filteredBuses.length} buses found`}
+            {`${filteredBuses.length} ${t('busesFound')}`}
           </Text>
         </View>
         
@@ -240,14 +240,14 @@ export default function Buses() {
             <>
               <Navigation size={16} color={theme.primary} />
               <Text style={[styles.locationButtonText, { color: theme.primary }]}>
-                Located
+                {t('located')}
               </Text>
             </>
           ) : (
             <>
               <AlertCircle size={16} color={theme.error} />
               <Text style={[styles.locationButtonText, { color: theme.error }]}>
-                Enable
+                {t('enable')}
               </Text>
             </>
           )}
@@ -255,10 +255,10 @@ export default function Buses() {
       </View>
 
       <View style={styles.filters}>
-        {renderFilterButton('all', 'All Buses')}
-        {renderFilterButton('active', 'Active')}
-        {renderFilterButton('nearby', location ? 'Nearby' : 'Soon')}
-        {renderFilterButton('affordable', 'Affordable')}
+        {renderFilterButton('all', t('allBuses'))}
+        {renderFilterButton('active', t('active'))}
+        {renderFilterButton('nearby', location ? t('nearby') : t('soon'))}
+        {renderFilterButton('affordable', t('affordable'))}
       </View>
 
       <FlatList
@@ -271,12 +271,12 @@ export default function Buses() {
             <View style={[styles.emptyState, { backgroundColor: theme.surface }]}>
               <Bus size={48} color={theme.textSecondary} />
               <Text style={[styles.emptyStateText, { color: theme.text }]}>
-                No buses found
+                {t('noBusesFound')}
               </Text>
               <Text style={[styles.emptyStateSubtext, { color: theme.textSecondary }]}>
                 {filter === 'nearby' && !location 
-                  ? 'Enable location to find nearby buses'
-                  : 'Try adjusting your filters or check back later'
+                  ? t('enableLocationFindNearby')
+                  : t('tryAdjustingFilters')
                 }
               </Text>
             </View>

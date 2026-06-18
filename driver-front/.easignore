@@ -1,0 +1,26 @@
+# EAS Build ignore file (takes priority over .gitignore)
+
+# Dependencies - never needed, EAS installs these on the build server
+node_modules/
+
+# Build outputs
+dist/
+android/
+ios/
+
+# Expo local cache
+.expo/
+
+# Local environment (never upload secrets)
+.env
+.env.local
+.env*.local
+
+# OS/editor noise
+.DS_Store
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*

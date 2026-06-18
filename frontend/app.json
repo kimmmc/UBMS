@@ -4,8 +4,9 @@
     "slug": "ubms",
     "version": "1.0.0",
     "orientation": "portrait",
+    "privacy": "public",
     "icon": "./assets/images/logo.png",
-    "scheme": "myapp",
+    "scheme": "ubms",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -25,7 +26,8 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
-      ]
+      ],
+      "package": "com.kimclarat.ubms"
     },
     "web": {
       "bundler": "metro",
@@ -41,7 +43,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
-      ]
+      ],
+
     ],
     "experiments": {
       "typedRoutes": true
@@ -57,6 +60,7 @@
       "eas": {
         "projectId": "a7e07b76-667c-4a78-aaa1-435490d69cc8"
       }
-    }
+    },
+    "owner": "kimclarat"
   }
 }

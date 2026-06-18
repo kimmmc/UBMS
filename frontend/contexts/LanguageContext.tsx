@@ -72,6 +72,42 @@ const translations: Translations = {
   loading: { en: 'Loading...', rw: 'Biracyashyirwaho...' },
   error: { en: 'Error', rw: 'Ikosa' },
   success: { en: 'Success', rw: 'Byagenze neza' },
+
+  // Home & Dashboard
+  welcomeBack: { en: 'Welcome back,', rw: 'Muraho,' },
+  nearestBus: { en: 'Nearest Bus', rw: 'Itenge riri hafi cyane' },
+  interested: { en: 'Interested', rw: 'Abyifuza' },
+  busesNearYou: { en: 'Buses Near You', rw: 'Amatenge ari hafi yawe' },
+  confirmed: { en: 'Confirmed', rw: 'Byemejwe' },
+  retry: { en: 'Retry', rw: 'Ongera ugerageze' },
+  noNearbyBuses: { en: 'No nearby buses found', rw: 'Nta matenge ari hafi yabonetse' },
+  enableLocationPrompt: { en: 'Enable location to find buses near you', rw: 'Fungura aho uherereye kugirango ubone amatenge' },
+  tryExpandSearch: { en: 'Try expanding your search area or check the Buses tab for all available buses', rw: 'Gerageza kwagura aho ushakira cyangwa urebe ahanditse Amatenge' },
+  located: { en: 'Located', rw: 'Aho uherereye' },
+  enableLocation: { en: 'Enable Location', rw: 'Fungura aho uherereye' },
+  kmAway: { en: 'km away', rw: 'km uvuye hano' },
+  freeSeats: { en: 'free', rw: 'ubusa' },
+  
+  // Buses tab
+  allAvailableBuses: { en: 'All Available Buses', rw: 'Amatenge Yose Ahari' },
+  busesFound: { en: 'buses found', rw: 'amatenge yabonetse' },
+  enable: { en: 'Enable', rw: 'Fungura' },
+  allBuses: { en: 'All Buses', rw: 'Amatenge Yose' },
+  active: { en: 'Active', rw: 'Akora' },
+  nearby: { en: 'Nearby', rw: 'Ahafi' },
+  soon: { en: 'Soon', rw: 'Vuba' },
+  affordable: { en: 'Affordable', rw: 'Ahendutse' },
+  noBusesFound: { en: 'No buses found', rw: 'Nta matenge yabonetse' },
+  enableLocationFindNearby: { en: 'Enable location to find nearby buses', rw: 'Fungura aho uherereye ubone amatenge ari hafi' },
+  tryAdjustingFilters: { en: 'Try adjusting your filters or check back later', rw: 'Gerageza guhindura gushakisha cyangwa ugaruke nyuma' },
+  capacityLabel: { en: 'Capacity:', rw: 'Imyanya yose:' },
+  freePlacesLabel: { en: 'Free Places:', rw: 'Imyanya irimo ubusa:' },
+  fareLabel: { en: 'Fare:', rw: 'Igiciro:' },
+  inactiveStatus: { en: 'Inactive', rw: 'Ntikora' },
+  arrivingSoonStatus: { en: 'Arriving Soon', rw: 'Igiye kuhagera' },
+  nearbyStatus: { en: 'Nearby', rw: 'Iri Hafi' },
+  enRouteStatus: { en: 'En Route', rw: 'Iri mu nzira' },
+  minLabel: { en: 'min', rw: 'imin' },
 };
 
 interface LanguageContextType {

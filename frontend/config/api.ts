@@ -10,12 +10,12 @@ export const API_CONFIG = {
     default: 'https://ubms-p9jp.onrender.com/api',
   }),
 
-  // Request timeout in milliseconds
-  TIMEOUT: 10000,
+  // Request timeout in milliseconds (30s to survive Render cold starts)
+  TIMEOUT: 30000,
 
   // Retry configuration
   MAX_RETRIES: 3,
-  RETRY_DELAY: 1000,
+  RETRY_DELAY: 2000,
 };
 
 // Environment-specific configurations

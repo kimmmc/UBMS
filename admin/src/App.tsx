@@ -13,6 +13,7 @@ import RoutesPage from './pages/Routes';
 import PickupPoints from './pages/PickupPoints';
 import Schedules from './pages/Schedules';
 import Analytics from './pages/Analytics';
+import LogsAndReports from './pages/LogsAndReports';
 import Settings from './pages/Settings';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                 <Route path="pickup-points" element={<PickupPoints />} />
                 <Route path="schedules" element={<Schedules />} />
                 <Route path="analytics" element={<Analytics />} />
+                <Route path="logs" element={<LogsAndReports />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
             </Routes>

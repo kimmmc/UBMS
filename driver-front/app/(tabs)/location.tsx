@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, Pressable, Alert, ScrollView, Dimensions, Platform } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Alert, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import WebView from 'react-native-webview';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLocation } from '@/contexts/LocationContext';
 import { useDriverData } from '@/hooks/useDriverData';
@@ -79,16 +80,10 @@ export default function Location() {
     }
   };
 
-  let MapView: any = null;
-  let Marker: any = null;
-  let PROVIDER_GOOGLE: any = null;
-
-  if (Platform.OS !== 'web') {
-    MapView = require('react-native-maps').default;
-    const Maps = require('react-native-maps');
-    Marker = Maps.Marker;
-    PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
-  }
+  const isDark = theme.background === '#0F172A' || theme.background === '#1a1a2e';
+  const tileUrl = isDark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -183,40 +178,26 @@ export default function Location() {
 
           {location ? (
             <View style={styles.mapContainer}>
-              {Platform.OS === 'web' ? (
-                <View style={{ height: 200, backgroundColor: theme.surface, alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ color: theme.text }}>Google Maps is currently only supported on mobile devices.</Text>
-                  <MapPin size={48} color={theme.textSecondary} style={{ marginTop: 16 }} />
-                </View>
-              ) : (
-                <MapView
-                  style={styles.map}
-                  provider={PROVIDER_GOOGLE}
-                  region={{
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
-                  }}
-                  showsUserLocation={true}
-                  showsMyLocationButton={false}
-                >
-                  <Marker
-                    coordinate={{
-                      latitude: location.latitude,
-                      longitude: location.longitude,
-                    }}
-                    title={t('location.your.bus')}
-                    description={bus?.plateNumber || t('location.bus.location')}
-                  >
-                    <View style={[styles.busMarker, { backgroundColor: theme.primary }]}>
-                      <Text style={styles.busMarkerText}>
-                        🚌
-                      </Text>
-                    </View>
-                  </Marker>
-                </MapView>
-              )}
+              <WebView
+                source={{ html: `
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box;}html,body,#map{width:100%;height:100vh;}.bus-icon{background:${theme.primary};color:#fff;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);}.user-dot{width:16px;height:16px;border-radius:50%;background:#4285f4;border:3px solid #fff;box-shadow:0 2px 8px rgba(66,133,244,0.6);}</style>
+</head><body><div id="map"></div>
+<script>
+var map=L.map('map',{zoomControl:true}).setView([${location.latitude},${location.longitude}],16);
+L.tileLayer('${tileUrl}',{attribution:'&copy; OpenStreetMap',maxZoom:19,subdomains:'abcd'}).addTo(map);
+var uIcon=L.divIcon({className:'',html:'<div class="user-dot"></div>',iconSize:[16,16],iconAnchor:[8,8]});
+L.marker([${location.latitude},${location.longitude}],{icon:uIcon}).addTo(map).bindPopup('<b>🚌 ${bus?.plateNumber || 'Your Bus'}</b><br>You are here').openPopup();
+</script></body></html>` }}
+                style={styles.map}
+                javaScriptEnabled
+                domStorageEnabled
+                originWhitelist={['*']}
+              />
             </View>
           ) : (
             <View style={[styles.noLocationContainer, { backgroundColor: theme.background }]}>

@@ -10,6 +10,7 @@ import {
   MapPin,
   Calendar,
   BarChart3,
+  FileText,
   Settings,
   LogOut,
   Menu,
@@ -24,6 +25,7 @@ const navigation = [
   { name: 'Pickup Points', href: '/pickup-points', icon: MapPin },
   { name: 'Schedules', href: '/schedules', icon: Calendar },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Logs & Reports', href: '/logs', icon: FileText },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 

@@ -24,7 +24,7 @@ interface Bus {
   _id: string;
   plateNumber: string;
   capacity: number;
-  fare: number;
+  fare?: number;
   driverId: any;
   routeId: any;
   currentLocation: {
@@ -36,7 +36,7 @@ interface Bus {
   };
   isActive: boolean;
   isOnline: boolean;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export default function Buses() {

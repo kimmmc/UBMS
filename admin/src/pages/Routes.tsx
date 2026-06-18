@@ -21,10 +21,10 @@ interface Route {
   pickupPoints: any[];
   estimatedDuration: number;
   fare: number;
-  origin: string;
-  destination: string;
+  origin?: string;
+  destination?: string;
   isActive: boolean;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export default function Routes() {
